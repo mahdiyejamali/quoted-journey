@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Animated, Pressable, StyleSheet } from "react-native";
+import useFade from "../hooks/useFade";
 import { getRandomQuote } from "../providers/quotable";
-import AnimatedText from "./AnimatedText";
 
 export default function Quote() {
     const [currentQuote, setCurrentQuote] = useState('');
-    
+    const {fadeStyle, fadeIn, fadeOut} = useFade();
+
     const fetchData = useCallback(async () => {
         const response = await getRandomQuote('life');
         const author = response?.author ? `\n\n--${response?.author}` : '';
@@ -13,23 +14,44 @@ export default function Quote() {
     }, []);
 
     useEffect(() => {
+        fadeIn();
+    }, [currentQuote]);
+
+    useEffect(() => {
         fetchData();
     }, [fetchData])
 
+    const handlePress = () => {
+        fadeOut();
+        setTimeout(() => {
+            fetchData();
+        }, 1000);
+    }
+
     return (
-        <Pressable onPress={fetchData}>
-        <AnimatedText style={styles.text} text={currentQuote} />
+        <Pressable onPress={handlePress} style={styles.pressableBackground}>
+            <Animated.Text style={[styles.text, fadeStyle]}>
+                {currentQuote}
+            </Animated.Text>
         </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
     text: {
-      color: 'black',
-      fontSize: 21,
-      textAlign: 'center',
-    //   fontFamily: 'body',
-      fontWeight: 'bold',
-    //   fontStyle: 'italic',
+        color: 'white',
+        fontSize: 21,
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        fontWeight: 'bold',
+        marginLeft: 20,
+        marginRight: 20,
+    },
+    pressableBackground: {
+        flex: 1,
+        resizeMode: 'contain',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
     },
 });

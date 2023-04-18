@@ -1,10 +1,12 @@
 import { ImageBackground, StyleSheet } from 'react-native';
+import NotificationHandler from './components/NotificationHandler';
 import Quote from './components/Quote';
 
 export default function Main() {
   return (
-      <ImageBackground source={require('../assets/bg-1.jpg')} style={styles.backgroundImage}>
+      <ImageBackground source={require('../assets/bg-6.jpg')} style={styles.backgroundImage}>
         <Quote />
+        <NotificationHandler />
       </ImageBackground>
   );
 }
@@ -15,9 +17,5 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: 'contain',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
   },
 });
