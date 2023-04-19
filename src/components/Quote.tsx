@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 21,
         textAlign: 'center',
-        fontFamily: 'Avenir',
+        fontFamily: 'Noteworthy',
         fontWeight: 'bold',
         marginLeft: 20,
         marginRight: 20,

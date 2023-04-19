@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Text, View, Button, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Subscription } from 'expo-notifications';
 
+const PROJEC_ID = '460023b5-84f9-4118-9575-78427c65c0a5';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -45,14 +46,18 @@ export default function NotificationHandler() {
 }
 
 async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: 'Here is the notification body',
-      data: { data: 'goes here' },
-    },
-    trigger: { seconds: 2 },
-  });
+    await Notifications.scheduleNotificationAsync({
+        content: {
+            title: "You've got mail! 📬",
+            body: 'Here is the notification body',
+            data: { data: 'goes here' },
+        },
+        trigger: {
+            hour: 11,
+            minute: 0,
+            repeats: true,
+        },
+    });
 }
 
 async function registerForPushNotificationsAsync() {
@@ -78,7 +83,7 @@ async function registerForPushNotificationsAsync() {
       alert('Failed to get push token for push notification!');
       return;
     }
-    token = (await Notifications.getExpoPushTokenAsync({projectId: '460023b5-84f9-4118-9575-78427c65c0a5'})).data;
+    token = (await Notifications.getExpoPushTokenAsync({projectId: PROJEC_ID})).data;
     console.log(token);
   } else {
     alert('Must use physical device for Push Notifications');
