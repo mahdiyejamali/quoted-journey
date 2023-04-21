@@ -1,14 +1,13 @@
-import { Box, HStack, Image, Pressable, ScrollView, VStack } from 'native-base';
+import { Box, Heading, HStack, Image, Pressable, ScrollView, VStack } from 'native-base';
 import { ReactNode, useRef } from 'react';
 import Drawer from 'react-native-drawer';
 import { useDispatch } from 'react-redux';
 import { themeSources } from '../constants/themes';
-import useStorage, { THEME } from '../hooks/useStorage';
 import { setThemeKey } from '../store/slices/themeSlice';
 
 const drawerStyles = {
-    drawer: { shadowColor: '#000000', shadowOpacity: 0.5, shadowRadius: 3},
-    main: {},
+    // drawer: { shadowColor: '#000000', shadowOpacity: 0.5, shadowRadius: 3},
+    // main: {},
 }
 interface SettingsDrawerProps {
     renderChildren: (props: {openDrawer: () => void}) => ReactNode;
@@ -41,6 +40,7 @@ export default function SettingsDrawer(props: SettingsDrawerProps) {
 const SettingDrawerContent = () => {
     return (
         <ScrollView h="full">
+            <Heading>Themese</Heading>
             <Themes />
         </ScrollView>
     )
@@ -49,29 +49,29 @@ const SettingDrawerContent = () => {
 const Themes = () => {
     return (
         <VStack space={3}>
-            <HStack space={3} justifyContent="center">
+            <HStack space={5} justifyContent="center">
                 <Theme themeKey="1" />
                 <Theme themeKey="2" />
             </HStack>
-            <HStack space={3} justifyContent="center">
+            <HStack space={5} justifyContent="center">
                 <Theme themeKey="3" />
                 <Theme themeKey="4" />
             </HStack>
-            <HStack space={3} justifyContent="center">
+            <HStack space={5} justifyContent="center">
                 <Theme themeKey="5" />
                 <Theme themeKey="6" />
             </HStack>
-            <HStack space={3} justifyContent="center">
+            <HStack space={5} justifyContent="center">
                 <Theme themeKey="7" />
                 <Theme themeKey="8" />
             </HStack>
-            <HStack space={3} justifyContent="center">
+            <HStack space={5} justifyContent="center">
                 <Theme themeKey="9" />
                 <Theme themeKey="10" />
             </HStack>
-            <HStack space={3} justifyContent="center">
-                <Theme themeKey="10" />
+            <HStack space={5} justifyContent="center">
                 <Theme themeKey="11" />
+                <Theme themeKey="12" />
             </HStack>
         </VStack>
     )
@@ -79,7 +79,6 @@ const Themes = () => {
 
 const Theme = (props: {themeKey: string}) => {
     const dispatch = useDispatch()
-    // const {storeData} = useStorage();
 
     return (
         <Pressable onPress={() => dispatch(setThemeKey(props.themeKey))}>
@@ -89,7 +88,7 @@ const Theme = (props: {themeKey: string}) => {
                 isPressed
             }) => {
                 return (
-                    <Box alignItems="left" marginLeft="3" style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
+                    <Box alignItems="left" style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
                         <Box
                             rounded="lg" 
                             overflow="hidden" 
