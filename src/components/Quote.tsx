@@ -40,9 +40,9 @@ export default function Quote() {
 const styles = StyleSheet.create({
     text: {
         color: 'white',
-        fontSize: 21,
+        fontSize: 20,
         textAlign: 'center',
-        fontFamily: 'Noteworthy',
+        fontFamily: 'BalsamiqSans_700Bold',
         fontWeight: 'bold',
         marginLeft: 20,
         marginRight: 20,

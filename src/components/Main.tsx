@@ -61,7 +61,7 @@ export default function Main() {
                 p="3"
                 // bg="secondary"
                 borderColor={MAIN_BUTTON_COLOR}
-                icon={<Icon color="white" name="logo-instagram" as={Ionicons} size="lg" />} 
+                icon={<Icon color="white" name="share" as={Ionicons} size="lg" />} 
                 onPress={shareToInstagram}
             />
           </Box>
@@ -85,7 +85,7 @@ export default function Main() {
               variant="solid" 
               p="3"
               bg={MAIN_BUTTON_COLOR}
-              icon={<Icon color="white" name="ios-pause" as={Ionicons} size="lg" />}
+              icon={<Icon color="white" name="volume-mute-outline" as={Ionicons} size="lg" />}
               onPress={stopAudio}
             /> :
             <IconButton 
@@ -94,7 +94,7 @@ export default function Main() {
               variant="solid" 
               p="3"
               bg={MAIN_BUTTON_COLOR}
-              icon={<Icon color="white" name="ios-play" as={Ionicons} size="lg" />} 
+              icon={<Icon color="white" name="volume-high-outline" as={Ionicons} size="lg" />} 
               onPress={playAudio}
             />}
           </Box>

@@ -1,7 +1,8 @@
 import { useRef } from "react";
-import {Linking, Platform} from 'react-native';
+import {Platform} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import {captureRef} from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
 
 interface UseDownloadProps {
     onSuccess: () => void;
@@ -46,21 +47,20 @@ export default function useDownloadImage<T>(props: UseDownloadProps) {
         }
     };
 
-    const shareToInstagram = async () => {
+    const shareToInstagram = async () => {        
+        // Capture component 
+        const url = await captureRef(viewRef, {
+            format: 'jpg',
+            quality: 0.8,
+        });
+
         try {
-            // Capture component 
-            const uri = await captureRef(viewRef, {
-                format: 'png',
-                quality: 0.8,
-            });
-            const encodedUrl = encodeURIComponent(uri);
-            const instagramUrl = `instagram://library?AssetPath=${encodedUrl}`;
-            Linking.openURL(instagramUrl);
+            Sharing.shareAsync("file://" + url)
         } catch (e) {
-            console.log('shareImage', e);
+            console.log('shareToInstagram', e);
             props.onError();
         }
-    };
-
+    }
+    
     return {viewRef, downloadImage, shareToInstagram};
 }

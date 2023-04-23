@@ -40,7 +40,7 @@ export default function SettingsDrawer(props: SettingsDrawerProps) {
 const SettingDrawerContent = () => {
     return (
         <ScrollView h="full">
-            <Heading>Themese</Heading>
+            <Heading style={{margin: 20}}>Themes</Heading>
             <Themes />
         </ScrollView>
     )
