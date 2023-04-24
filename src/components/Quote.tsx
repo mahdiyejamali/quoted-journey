@@ -1,21 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { Animated, Pressable, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import useFade from "../hooks/useFade";
 import { getRandomQuote } from "../providers/quotable";
+import { selectQuoteText, setQuoteText } from "../store/slices/quoteSlice";
 
 export default function Quote() {
-    const [currentQuote, setCurrentQuote] = useState('');
     const {fadeStyle, fadeIn, fadeOut} = useFade();
+
+    const dispatch = useDispatch();
+    const saveCurrentQuoteText = (quote: string) => dispatch(setQuoteText(quote));
+    const currentQuoteText = useSelector(selectQuoteText);
 
     const fetchData = useCallback(async () => {
         const response = await getRandomQuote('life');
         const author = response?.author ? `\n\n--${response?.author}` : '';
-        setCurrentQuote(`${response.content}${author}`)
+        const quote = `${response.content}${author}`;
+        saveCurrentQuoteText(quote);
     }, []);
 
     useEffect(() => {
         fadeIn();
-    }, [currentQuote]);
+    }, [currentQuoteText]);
 
     useEffect(() => {
         fetchData();
@@ -31,7 +38,7 @@ export default function Quote() {
     return (
         <Pressable onPress={handlePress} style={styles.pressableBackground}>
             <Animated.Text style={[styles.text, fadeStyle]}>
-                {currentQuote}
+                {currentQuoteText}
             </Animated.Text>
         </Pressable>
     );

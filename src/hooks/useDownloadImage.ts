@@ -25,7 +25,7 @@ export default function useDownloadImage<T>(props: UseDownloadProps) {
             // Caputures component
             const uri = await captureRef(viewRef, {
                 format: 'png',
-                quality: 0.8,
+                quality: 1,
             });
     
             if (Platform.OS === 'android' || Platform.OS === 'ios') {
@@ -51,7 +51,7 @@ export default function useDownloadImage<T>(props: UseDownloadProps) {
         // Capture component 
         const url = await captureRef(viewRef, {
             format: 'jpg',
-            quality: 0.8,
+            quality: 1,
         });
 
         try {

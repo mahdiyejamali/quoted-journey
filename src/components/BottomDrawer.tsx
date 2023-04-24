@@ -1,9 +1,10 @@
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { Modal, View,StyleSheet, Dimensions } from 'react-native';
-import { Box, Heading, HStack, Image, Pressable, ScrollView, VStack } from 'native-base';
+import { Box, Button, Heading, HStack, Image, Pressable, ScrollView, Text, VStack } from 'native-base';
 import { useDispatch } from 'react-redux';
 import { themeSources } from '../constants/themes';
 import { setThemeKey } from '../store/slices/themeSlice';
+import useFavorite from '../hooks/useFavorite';
 
 interface BottomDrawer extends CategoriesProps {
     isOpen: boolean;
@@ -32,11 +33,17 @@ export default function BottomDrawer(props: BottomDrawer) {
                 visible={isOpen}
                 // onRequestClose={handleClose}
             >
-                <View style={[styles.bottomSheet, { height: windowHeight * 0.85 }]}>
-                    <Heading style={{margin: 15}}>Categories</Heading>
+                <View style={[styles.bottomDrawer, { height: windowHeight * 0.85 }]}>
+                    <Box style={{position: 'absolute',left: 0, top: 0, margin: 5}}>
+                        <Button variant='unstyled' onPress={handleClose}>
+                            <Text style={{fontWeight: 'bold'}}>Cancel</Text>
+                        </Button>
+                    </Box>
+
+                    <Heading style={{margin: 15}} size='md'>Categories</Heading>
                     <Categories {...categoriesProps} />
 
-                    <Heading style={{margin: 15}}>Themes</Heading>
+                    <Heading style={{margin: 15}} size='md'>Themes</Heading>
                     <Themes />
                 </View>
             </Modal>
@@ -109,16 +116,26 @@ interface CategoriesProps {
     navigateToHome: () => void;
 }
 const Categories = (props: CategoriesProps) => {
+    const {hasFavorites} = useFavorite();
     return (
         <HStack space={5} justifyContent="center">
             <Category categoryKey="General" onPress={props.navigateToHome} />
-            <Category categoryKey="Favorites" onPress={props.navigateToFavorites} />
+            <Category categoryKey="Favorites" onPress={props.navigateToFavorites} disabled={!hasFavorites()} backgroundColor={'rose.300'} />
         </HStack>
     )
 }
-const Category = (props: {categoryKey: string, onPress: () => void}) => {
+
+interface CategoryProps {
+    categoryKey: string;
+    onPress: () => void;
+    disabled?: boolean
+    backgroundColor?: string;
+}
+const Category = (props: CategoryProps) => {
+    const {disabled} = props;
+    const backgroundColor = props.backgroundColor || 'teal.200';
     return (
-        <Pressable onPress={props.onPress}>
+        <Pressable onPress={props.onPress} disabled={disabled}>
             {({
                 isHovered,
                 isFocused,
@@ -131,8 +148,12 @@ const Category = (props: {categoryKey: string, onPress: () => void}) => {
                             overflow="hidden" 
                             borderColor="coolGray.200" 
                             borderWidth=".5" 
+                            width={160}
+                            height={70}
+                            style={styles.categoryBox}
+                            backgroundColor={disabled ? 'gray.200': backgroundColor}
                         >
-                            {props.categoryKey} Quotes
+                            <Text style={{fontWeight: 'bold'}}>{props.categoryKey}</Text>
                         </Box>
                     </Box>
                 )
@@ -144,7 +165,7 @@ const Category = (props: {categoryKey: string, onPress: () => void}) => {
 
 
 const styles = StyleSheet.create({
-    bottomSheet: {
+    bottomDrawer: {
         position: 'absolute',
         left: 0,
         right: 0,
@@ -157,4 +178,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         backgroundColor: 'white',
     },
+    categoryBox: {
+        alignItems: 'center',
+        paddingVertical: 24
+    }
 });

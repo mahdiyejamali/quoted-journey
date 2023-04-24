@@ -10,13 +10,13 @@ export const quoteSlice = createSlice({
   name: 'quote',
   initialState: quoteInitialState,
   reducers: {
-    setText: (state, action) => {
+    setQuoteText: (state, action) => {
         state.text = action.payload;
     },
   },
 });
 
 export const { 
-    setText, 
+    setQuoteText, 
 } = quoteSlice.actions;
-export const selectText = (state: State) => state.quote?.text;
+export const selectQuoteText = (state: State) => state.quote?.text;
