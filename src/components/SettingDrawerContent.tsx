@@ -1,53 +1,23 @@
 import { Box, Heading, HStack, Image, Pressable, ScrollView, VStack } from 'native-base';
-import { ReactNode, useRef } from 'react';
-import Drawer from 'react-native-drawer';
 import { useDispatch } from 'react-redux';
 import { themeSources } from '../constants/themes';
 import { setThemeKey } from '../store/slices/themeSlice';
 
-const drawerStyles = {
-    // drawer: { shadowColor: '#000000', shadowOpacity: 0.5, shadowRadius: 3},
-    // main: {},
-}
-interface SettingsDrawerProps {
-    renderChildren: (props: {openDrawer: () => void}) => ReactNode;
-}
-export default function SettingsDrawer(props: SettingsDrawerProps) {
-    const drawerRef = useRef<Drawer>(null);
-
-    const openDrawer = () => drawerRef?.current?.open?.();
-    const closeDrawer = () => drawerRef?.current?.close?.()
+export default function SettingDrawerContent() {
     return (
-        <Drawer
-            ref={drawerRef}
-            side="bottom"
-            type="overlay"
-            content={<SettingDrawerContent />}
-            tapToClose={true}
-            openDrawerOffset={0.1} // 10% gap on the top side of drawer
-            // closedDrawerOffset={-3}
-            panCloseMask={0.2}
-            styles={drawerStyles}
-            tweenHandler={(ratio) => ({
-                main: { opacity: (2-ratio)/2 }
-            })}
-        >
-            {props.renderChildren({openDrawer})}
-        </Drawer>
-    );
-}
+        <>
+            <Heading style={{margin: 15}}>Categories</Heading>
+            <Categories />
 
-const SettingDrawerContent = () => {
-    return (
-        <ScrollView h="full">
-            <Heading style={{margin: 20}}>Themes</Heading>
+            <Heading style={{margin: 15}}>Themes</Heading>
             <Themes />
-        </ScrollView>
+        </>
     )
 }
 
 const Themes = () => {
     return (
+        <ScrollView>
         <VStack space={3}>
             <HStack space={5} justifyContent="center">
                 <Theme themeKey="1" />
@@ -74,6 +44,7 @@ const Themes = () => {
                 <Theme themeKey="12" />
             </HStack>
         </VStack>
+        </ScrollView>
     )
 }
 
@@ -103,3 +74,37 @@ const Theme = (props: {themeKey: string}) => {
         </Pressable>
     )
 }
+
+const Categories = () => {
+    return (
+        <HStack space={5} justifyContent="center">
+            <Category categoryKey="General" />
+            <Category categoryKey="Favorites" />
+        </HStack>
+    )
+}
+const Category = (props: {categoryKey: string}) => {
+    return (
+        <Pressable onPress={() => {}}>
+            {({
+                isHovered,
+                isFocused,
+                isPressed
+            }) => {
+                return (
+                    <Box alignItems="left" style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
+                        <Box
+                            rounded="lg" 
+                            overflow="hidden" 
+                            borderColor="coolGray.200" 
+                            borderWidth=".5" 
+                        >
+                            {props.categoryKey} Quotes
+                        </Box>
+                    </Box>
+                )
+            }}
+        </Pressable>
+    )
+}
+

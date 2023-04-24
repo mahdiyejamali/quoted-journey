@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Subscription } from 'expo-notifications';
-import { getRandomAffirmation, getRandomQuote } from '../providers/quotable';
+import { getRandomAffirmation } from '../providers/quotable';
 
 const PROJEC_ID = '460023b5-84f9-4118-9575-78427c65c0a5';
 Notifications.setNotificationHandler({
@@ -49,9 +49,9 @@ async function schedulePushNotification() {
 
     await Notifications.scheduleNotificationAsync({
         content: {
-            title: 'Quoted Journey',
+            title: 'Mindful Moments',
             body: quote,
-            data: { data: 'test test' },
+            data: { data: 'myData' },
         },
         trigger: {
             hour: 14,
