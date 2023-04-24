@@ -12,6 +12,7 @@ import {
 } from "@expo-google-fonts/balsamiq-sans";
 
 import store from './src/store/store';
+import useNotification from './src/hooks/useNotification';
 
 const theme = extendTheme({
 });
@@ -19,6 +20,7 @@ const theme = extendTheme({
 const persistor = persistStore(store);
 
 export default function App() {
+    const {} = useNotification();
     let [fontsLoaded] = useFonts({
         BalsamiqSans_400Regular,
         BalsamiqSans_400Regular_Italic,

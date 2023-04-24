@@ -50,12 +50,16 @@ interface QuoteGardenResponse {
   }[]
 }
 
+export const getRandomAffirmation = () => {
+  return affirmations[Math.floor(Math.random() * affirmations.length)];
+}
+
 export const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promise<QuoteResponse> {
   const url = `https://quote-garden.onrender.com/api/v3/quotes/random?genre=${genre}`;
   const response: QuoteGardenResponse = await processFetchRequest(url);
   if (!response) {
-    const randomStaticQuote = affirmations[Math.floor(Math.random()*affirmations.length)];
-    return {content: randomStaticQuote}
+    const randomAffirmation = getRandomAffirmation();
+    return {content: randomAffirmation}
   }
 
   const { data } = response;

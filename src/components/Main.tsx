@@ -7,7 +7,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import useDownloadImage from '../hooks/useDownloadImage';
 import useAudio from '../hooks/useAudio';
 
-import NotificationHandler from './NotificationHandler';
 import Quote from './Quote';
 import SettingsDrawer from './SettingsDrawer';
 import { themeSources } from '../constants/themes';
@@ -98,8 +97,6 @@ export default function Main() {
               onPress={playAudio}
             />}
           </Box>
-
-          <NotificationHandler />
         </View>
       )}
     />      
