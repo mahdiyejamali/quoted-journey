@@ -4,6 +4,7 @@ import { State } from '../store';
 
 export const themeInitialState = {
     themeKey: '1',
+    currentFavoriteIndex: 0,
 };
 
 export const themeSlice = createSlice({

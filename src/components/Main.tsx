@@ -1,17 +1,26 @@
-import Quote from './Quote';
 import MainWrapper, { MainWrapperProps } from './MainWrapper';
 import { selectThemeKey } from '../store/slices/themeSlice';
 import { useSelector } from 'react-redux';
-import { selectQuoteText } from '../store/slices/quoteSlice';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getQuotesList } from '../providers/quotable';
+import { setQuoteText } from '../store/slices/quoteSlice';
 
 interface MainProps extends Pick<MainWrapperProps, 'openDrawer'> {}
 export default function Main(props: MainProps) {
-  const themeKey = useSelector(selectThemeKey);
-  const quoteText = useSelector(selectQuoteText);
+  const [quotesList, setQuotesList] = useState<string[]>([]);
+    const dispatch = useDispatch();
+    const fetchData = useCallback(async () => {
+        const response = await getQuotesList();
+        setQuotesList(response);
+        dispatch(setQuoteText(response[0]))
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
   return (
-    <MainWrapper {...props} themeKey={themeKey} quoteText={quoteText}>
-      <Quote />
-    </MainWrapper> 
+    <MainWrapper {...props} category={"main"} quotesList={quotesList} />
   );
 }

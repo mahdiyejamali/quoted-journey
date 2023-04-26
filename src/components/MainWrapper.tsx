@@ -1,5 +1,5 @@
-import { ImageBackground, StyleSheet } from 'react-native';
-import { Box, Icon, IconButton, useToast, View } from 'native-base';
+import { Dimensions, ImageBackground, StyleSheet } from 'react-native';
+import { Box, Icon, IconButton, View } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -8,90 +8,54 @@ import useAudio from '../hooks/useAudio';
 
 import { themeSources } from '../constants/themes';
 import CustomToast from './CustomToast';
-import { ReactNode } from 'react';
-import useFavorite from '../hooks/useFavorite';
-import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
-import { useDispatch } from 'react-redux';
+import { selectThemeKey } from '../store/slices/themeSlice';
+import { useSelector } from 'react-redux';
+import QuoteSwiper, { Category } from './QuoteSwiper';
+import { QuoteText } from './QuoteWrapper';
+import { selectQuoteText } from '../store/slices/quoteSlice';
 
 const MAIN_BUTTON_COLOR = "teal.500";
 // https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
 
 export interface MainWrapperProps {
+    quotesList: string[];
+    category: Category;
     openDrawer: () => void;
-    children: ReactNode;
-    themeKey: string;
-    quoteText: string;
 }
 export default function MainWrapper(props: MainWrapperProps) {
-    const {openDrawer, children, themeKey, quoteText} = props;
-    const dispatch = useDispatch();
+    const {quotesList, category, openDrawer} = props;
+    const themeKey = useSelector(selectThemeKey);
 
-    const toast = useToast();
-    const {isFavoriteSaved, getFavoriteKey} = useFavorite();
     const {isPlaying, playAudio, stopAudio} = useAudio();
     const {viewRef, downloadImage, shareToInstagram} = useDownloadImage<ImageBackground>({
-        onSuccess: () => {
-            toast.show({
-                render: () => <CustomToast status='success' title='Successfully saved!' />
-            });
-        },
-        onError: () => {
-            toast.show({
-                render: () => <CustomToast status='error' title='Something went wrong.' />
-            });
-        }
+        renderSuccessToast: () => <CustomToast status='success' title='Successfully saved!' />,
+        renderFailureToast: () => <CustomToast status='error' title='Something went wrong.' />
     });
-    const favoriteKey = getFavoriteKey(themeKey, quoteText);
-    const isFavorite = isFavoriteSaved(favoriteKey);
-    const onPressFavorite = () => {
-        if (isFavorite) {
-            dispatch(removeFavorite(favoriteKey))
-        } else {
-            dispatch(addFavorite(favoriteKey))
-        }
-    }
 
     return (
         <View style={styles.container}>
-            <ImageBackground ref={viewRef} source={themeSources[themeKey]} style={styles.backgroundImage}>
-                {children}
+            
+            {/* Hidden downloadable view */}
+            <View ref={viewRef} 
+                style={[styles.container, {position: 'absolute', left: Dimensions.get('window').width}]}
+            >
+                <View style={{flex: 1}}>
+                <ImageBackground source={themeSources[themeKey]} style={styles.backgroundImage}>
+                    <QuoteText quoteText={useSelector(selectQuoteText)} />
+                </ImageBackground>
+                </View>
+            </View>
+
+            <ImageBackground  source={themeSources[themeKey]} style={styles.backgroundImage}>
+                <QuoteSwiper 
+                    quotesList={quotesList}
+                    category={category}
+                    themeKey={themeKey} 
+                    downloadImage={downloadImage} 
+                    shareToInstagram={shareToInstagram} 
+                />
             </ImageBackground>
-            
-            <Box style={styles.actionsBox}>
-                <IconButton 
-                    m={'8px'} 
-                    borderRadius="full" 
-                    variant="outline" 
-                    p="3"
-                    // bg="secondary" 
-                    borderColor={MAIN_BUTTON_COLOR}
-                    icon={<Icon color="white" name={isFavorite ? "favorite": "favorite-border"} as={MaterialIcons} size="lg" />} 
-                    onPress={onPressFavorite}
-                />
 
-                <IconButton 
-                    m={'8px'} 
-                    borderRadius="full" 
-                    variant="outline" 
-                    p="3"
-                    // bg="secondary" 
-                    borderColor={MAIN_BUTTON_COLOR}
-                    icon={<Icon color="white" name="file-download" as={MaterialIcons} size="lg" />} 
-                    onPress={downloadImage}
-                />
-
-                <IconButton 
-                    m={'8px'} 
-                    borderRadius="full" 
-                    variant="outline" 
-                    p="3"
-                    // bg="secondary"
-                    borderColor={MAIN_BUTTON_COLOR}
-                    icon={<Icon color="white" name="share" as={Ionicons} size="lg" />} 
-                    onPress={shareToInstagram}
-                />
-            </Box>
-            
             <Box style={[styles.mainButtons, styles.leftBox]}>
                 <IconButton 
                     m={'8px'} 
@@ -131,15 +95,13 @@ export default function MainWrapper(props: MainWrapperProps) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        resizeMode: 'contain',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
     },
     backgroundImage: {
         flex: 1,
-    },
-    actionsBox: {
-        flexDirection: 'row',
-        position: 'absolute', 
-        bottom: 190, 
-        alignSelf: 'center'
     },
     mainButtons: {
         position: 'absolute', 
@@ -150,21 +112,5 @@ const styles = StyleSheet.create({
     },
     rightBox: {
         right: 30,
-    },
-    text: {
-        color: 'white',
-        fontSize: 20,
-        textAlign: 'center',
-        fontFamily: 'BalsamiqSans_700Bold',
-        fontWeight: 'bold',
-        marginLeft: 20,
-        marginRight: 20,
-    },
-    pressableBackground: {
-        flex: 1,
-        resizeMode: 'contain',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%',
     },
 });

@@ -8,7 +8,7 @@ export default function useStorage() {
             const jsonValue = await AsyncStorage.getItem(`${APP_KEY}_${key}`);
             return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch(e) {
-            console.log('getData', e);
+            console.error('getData', e);
         }      
     }
 
@@ -17,7 +17,7 @@ export default function useStorage() {
             const jsonValue = JSON.stringify(value);
             await AsyncStorage.setItem(`${APP_KEY}_${key}`, jsonValue);
         } catch (e) {
-            console.log('storeData', e);
+            console.error('storeData', e);
         }
     }
 
@@ -25,7 +25,7 @@ export default function useStorage() {
         try {
             await AsyncStorage.removeItem(`${APP_KEY}_${key}`);
         } catch(e) {
-            console.log('removeData', e);
+            console.error('removeData', e);
         }
     }
 

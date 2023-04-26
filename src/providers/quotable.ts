@@ -1,5 +1,6 @@
 import { processFetchRequest } from '../utils';
 import { affirmations } from "../constants/affirmations"
+import { lifeQuotes } from "../constants/lifeQuotes"
 
 export interface QuoteResponse {
   content: string;
@@ -64,4 +65,31 @@ export const getRandomQuote = async function (genre: QuoteGardenGenre = "life"):
 
   const { data } = response;
   return {content: data?.[0]?.quoteText, author: data?.[0]?.quoteAuthor};
+}
+
+export const createQuoteText = (quoteObj: QuoteResponse) => {
+  const author = quoteObj?.author ? `\n\n--${quoteObj?.author}` : '';
+  return `${quoteObj.content}${author}`;
+}
+
+export const getAffirmations = (): string[] => {
+  return affirmations.map(item => createQuoteText({content: item}));
+}
+
+function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+export const getQuotesList = async function (genre: QuoteGardenGenre = "life", limit: number = 10): Promise<string[]> {
+  // const url = `https://quote-garden.onrender.com/api/v3/quotes?genre=${genre}&limit=${limit}`;
+  // const response: QuoteGardenResponse = await processFetchRequest(url);
+  // if (!response) {
+  //   return getAffirmations()
+  // }
+
+  const randomStartIndex = getRandomInt(0, lifeQuotes.length - limit);
+  const quotes = lifeQuotes.slice(randomStartIndex, randomStartIndex + limit).map(item => createQuoteText({content: item?.quoteText, author: item?.quoteAuthor}));
+  return quotes;
 }

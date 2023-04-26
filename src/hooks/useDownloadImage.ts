@@ -1,22 +1,36 @@
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import {Platform} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import {captureRef} from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
+import { useToast } from "native-base";
 
 interface UseDownloadProps {
-    onSuccess: () => void;
-    onError: () => void
+    renderSuccessToast: () => ReactNode;
+    renderFailureToast: () => ReactNode;
 }
 export default function useDownloadImage<T>(props: UseDownloadProps) {
     const viewRef = useRef<T | null>(null);
+    const toast = useToast();
+
+    const onSuccess = () => {
+        toast.show({
+            render: props.renderSuccessToast
+        })
+    };
+
+    const onError = () => {
+        toast.show({
+            render: props.renderFailureToast
+        })
+    }
 
     const getPermission = async () => {
         try {
             return MediaLibrary.requestPermissionsAsync();
         } catch (err) {
-            console.log('getPermission', err);
-            props.onError();
+            console.error('getPermission', err);
+            onError();
         }
     };
 
@@ -37,13 +51,13 @@ export default function useDownloadImage<T>(props: UseDownloadProps) {
     
             const image = await MediaLibrary.createAssetAsync(uri);
             if (image) {
-                props.onSuccess();
+                onSuccess();
             } else {
-                props.onError();
+                onError();
             }
         } catch (e) {
-            console.log('downloadImage', e);
-            props.onError();
+            console.error('downloadImage', e);
+            onError();
         }
     };
 
@@ -57,8 +71,8 @@ export default function useDownloadImage<T>(props: UseDownloadProps) {
         try {
             Sharing.shareAsync("file://" + url)
         } catch (e) {
-            console.log('shareToInstagram', e);
-            props.onError();
+            console.error('shareToInstagram', e);
+            onError();
         }
     }
     

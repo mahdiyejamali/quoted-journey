@@ -102,7 +102,7 @@ const Theme = (props: {themeKey: string}) => {
                             borderColor="coolGray.200" 
                             borderWidth=".5" 
                         >
-                            <Image width={160} height={250} source={themeSources[props.themeKey]} alt="image" />
+                            <Image width={160} height={200} source={themeSources[props.themeKey]} alt="image" />
                         </Box>
                     </Box>
                 )
