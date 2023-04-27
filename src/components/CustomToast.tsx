@@ -6,7 +6,7 @@ export interface CustomToastProps {
 }
 type Status = 'success' | 'error' | 'info' | 'warning';
 const BG_COLORS: {[key in Status]: string} = {
-    'success': 'success.200',
+    'success': 'emerald.200',
     'error': 'error.400',
     'info': 'info.200',
     'warning': 'warning.200',

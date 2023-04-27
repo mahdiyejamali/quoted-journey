@@ -28,13 +28,12 @@ export default function MainWrapper(props: MainWrapperProps) {
 
     const {isPlaying, playAudio, stopAudio} = useAudio();
     const {viewRef, downloadImage, shareToInstagram} = useDownloadImage<ImageBackground>({
-        renderSuccessToast: () => <CustomToast status='success' title='Successfully saved!' />,
+        renderSuccessToast: () => <CustomToast status='success' title='Saved in photos!' />,
         renderFailureToast: () => <CustomToast status='error' title='Something went wrong.' />
     });
 
     return (
         <View style={styles.container}>
-            
             {/* Hidden downloadable view */}
             <View ref={viewRef} 
                 style={[styles.container, {position: 'absolute', left: Dimensions.get('window').width}]}

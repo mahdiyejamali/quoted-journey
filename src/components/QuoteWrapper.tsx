@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Box, Icon, IconButton, Text, View } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 const MAIN_BUTTON_COLOR = "teal.500";
 // https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
 
+const QUOTE_ITEM_HEIGHT = Dimensions.get('window').height;
+const QUOTE_ITEM_WIDTH = Dimensions.get('window').width;
 export interface QuoteWrapperProps {
     quoteText: string;
     themeKey: string;
@@ -30,8 +32,9 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
         }
     }
 
+
     return (
-        <View style={styles.container}>
+        <View style={styles.container} height={QUOTE_ITEM_HEIGHT}>
             <QuoteText quoteText={quoteText} />
             
             {!!quoteText && <Box style={styles.actionsBox}>
@@ -96,13 +99,16 @@ const styles = StyleSheet.create({
     textWrapper: {
         flex: 1,
         justifyContent: 'center',
+        paddingHorizontal: 27,
     },
     text: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 27,
+        lineHeight: 32,
         textAlign: 'center',
-        fontFamily: 'BalsamiqSans_700Bold',
+        fontFamily: 'IndieFlower-Regular',
         fontWeight: 'bold',
-        marginHorizontal: 20,
+        paddingVertical: 30,
+        height: 'auto'
     },
 });

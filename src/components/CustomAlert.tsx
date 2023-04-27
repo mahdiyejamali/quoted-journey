@@ -8,7 +8,7 @@ export interface CustomAlertProps {
 }
 type AlertStatus = 'success' | 'error' | 'info' | 'warning';
 const ALERT_TITLES: {[key in AlertStatus]: string} = {
-    'success': 'Successfully saved!',
+    'success': 'Successful!',
     'error': 'Please try again later!',
     'info': '',
     'warning': '',

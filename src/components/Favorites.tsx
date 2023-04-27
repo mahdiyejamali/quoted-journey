@@ -4,7 +4,7 @@ import useFavorite from '../hooks/useFavorite';
 
 interface FavoritesProps extends Pick<MainWrapperProps, 'openDrawer'> {}
 export default function Favorites(props: FavoritesProps) {
-  const {removeAllFavorites, hasFavorites} = useFavorite();
+  const {removeAllFavorites} = useFavorite();
 
   useEffect(() => {
     // removeAllFavorites()

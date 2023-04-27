@@ -15,13 +15,15 @@ export default function useDownloadImage<T>(props: UseDownloadProps) {
 
     const onSuccess = () => {
         toast.show({
-            render: props.renderSuccessToast
+            render: props.renderSuccessToast,
+            placement: 'top'
         })
     };
 
     const onError = () => {
         toast.show({
-            render: props.renderFailureToast
+            render: props.renderFailureToast,
+            placement: 'top'
         })
     }
 

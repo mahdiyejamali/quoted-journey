@@ -25,7 +25,7 @@ export default function BottomDrawer(props: BottomDrawer) {
     return (
         <GestureRecognizer
             // onSwipeDown={() => setIsOpen(false)}
-            // config={{velocityThreshold: 0.8, directionalOffsetThreshold: 150}}
+            // config={{velocityThreshold: 0.01, directionalOffsetThreshold: 250}}
         >
             <Modal
                 animationType="slide"

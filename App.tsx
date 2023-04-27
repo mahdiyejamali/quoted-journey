@@ -12,15 +12,13 @@ import {
 } from "@expo-google-fonts/balsamiq-sans";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store/store';
 import useNotification from './src/hooks/useNotification';
 import Favorites from './src/components/Favorites';
 import BottomDrawer from './src/components/BottomDrawer';
-import { ReactNode, useState } from 'react';
-
-const theme = extendTheme({
-});
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 const Stack = createNativeStackNavigator();
 interface ScreenWrapperChildrenProps {
@@ -67,7 +65,12 @@ const NavigationWrapper = () => {
     )
 }
 
+const theme = extendTheme({
+});
+
 const persistor = persistStore(store);
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
     const {} = useNotification();
     let [fontsLoaded] = useFonts({
@@ -75,17 +78,36 @@ export default function App() {
         BalsamiqSans_400Regular_Italic,
         BalsamiqSans_700Bold,
         BalsamiqSans_700Bold_Italic,
+
+        'Caveat-Bold': require('./assets/fonts/Caveat-Bold.ttf'),
+        'Caveat-Medium': require('./assets/fonts/Caveat-Medium.ttf'),
+        'Caveat-Regular': require('./assets/fonts/Caveat-Regular.ttf'),
+        'Caveat-SemiBold': require('./assets/fonts/Caveat-SemiBold.ttf'),
+        'IndieFlower-Regular': require('./assets/fonts/IndieFlower-Regular.ttf'),
+        'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+        'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+        'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        'Satisfy-Regular': require('./assets/fonts/Satisfy-Regular.ttf'),
+        'Signika-VariableFont_wght': require('./assets/fonts/Signika-VariableFont_wght.ttf'),
     });
 
+    const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded]);
+
     if (!fontsLoaded) {
-        return <></>;
+        return null;
     }
 
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <NativeBaseProvider theme={theme}>
-                    <NavigationWrapper />
+                    <View style={{flex: 1}} onLayout={onLayoutRootView}>
+                        <NavigationWrapper />
+                    </View>
                 </NativeBaseProvider>
             </PersistGate>
         </Provider>

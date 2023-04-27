@@ -82,7 +82,7 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-export const getQuotesList = async function (genre: QuoteGardenGenre = "life", limit: number = 10): Promise<string[]> {
+export const getQuotesList = async function (genre: QuoteGardenGenre = "life", limit: number = 200): Promise<string[]> {
   // const url = `https://quote-garden.onrender.com/api/v3/quotes?genre=${genre}&limit=${limit}`;
   // const response: QuoteGardenResponse = await processFetchRequest(url);
   // if (!response) {
@@ -90,6 +90,9 @@ export const getQuotesList = async function (genre: QuoteGardenGenre = "life", l
   // }
 
   const randomStartIndex = getRandomInt(0, lifeQuotes.length - limit);
-  const quotes = lifeQuotes.slice(randomStartIndex, randomStartIndex + limit).map(item => createQuoteText({content: item?.quoteText, author: item?.quoteAuthor}));
+
+  const quotes = lifeQuotes.slice(randomStartIndex, randomStartIndex + limit)
+    .map(item => createQuoteText({content: item?.quoteText, author: item?.quoteAuthor}));
+
   return quotes;
 }
