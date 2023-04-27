@@ -6,6 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import useFavorite from '../hooks/useFavorite';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
 import { useDispatch } from 'react-redux';
+import { selectThemeKey } from '../store/slices/themeSlice';
+import { useSelector } from 'react-redux';
+import { themeFontColors } from '../constants/themes';
 
 const MAIN_BUTTON_COLOR = "teal.500";
 // https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
@@ -14,13 +17,13 @@ const QUOTE_ITEM_HEIGHT = Dimensions.get('window').height;
 const QUOTE_ITEM_WIDTH = Dimensions.get('window').width;
 export interface QuoteWrapperProps {
     quoteText: string;
-    themeKey: string;
     downloadImage: () => void;
     shareToInstagram: () => void;
 }
 export default function QuoteWrapper(props: QuoteWrapperProps) {
-    const {quoteText, themeKey, downloadImage, shareToInstagram} = props;
+    const {quoteText, downloadImage, shareToInstagram} = props;
     const dispatch = useDispatch();
+    const themeKey = useSelector(selectThemeKey);
 
     const {isFavoriteSaved} = useFavorite();
     const isFavorite = isFavoriteSaved(quoteText);
@@ -45,7 +48,7 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
                     p="3"
                     // bg="secondary" 
                     borderColor={MAIN_BUTTON_COLOR}
-                    icon={<Icon color="white" name={isFavorite ? "favorite": "favorite-border"} as={MaterialIcons} size="lg" />} 
+                    icon={<Icon color={themeFontColors[themeKey] || 'white'} name={isFavorite ? "favorite": "favorite-border"} as={MaterialIcons} size="lg" />} 
                     onPress={onPressFavorite}
                 />
 
@@ -56,7 +59,7 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
                     p="3"
                     // bg="secondary" 
                     borderColor={MAIN_BUTTON_COLOR}
-                    icon={<Icon color="white" name="file-download" as={MaterialIcons} size="lg" />} 
+                    icon={<Icon color={themeFontColors[themeKey] || 'white'} name="file-download" as={MaterialIcons} size="lg" />} 
                     onPress={downloadImage}
                 />
 
@@ -67,7 +70,7 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
                     p="3"
                     // bg="secondary"
                     borderColor={MAIN_BUTTON_COLOR}
-                    icon={<Icon color="white" name="share" as={Ionicons} size="lg" />} 
+                    icon={<Icon color={themeFontColors[themeKey] || 'white'} name="share" as={Ionicons} size="lg" />} 
                     onPress={shareToInstagram}
                 />
             </Box>}
@@ -75,13 +78,16 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
     );
 }
 
-export const QuoteText = (props: {quoteText: string}) => (
-    <View style={styles.textWrapper}>
-        <Text style={styles.text}>
-            {props.quoteText}
-        </Text>
-    </View>
-)
+export const QuoteText = (props: {quoteText: string}) => {
+    const themeKey = useSelector(selectThemeKey);
+    return (
+        <View style={styles.textWrapper}>
+            <Text style={[styles.text, {color: themeFontColors[themeKey] || 'white'}]}>
+                {props.quoteText}
+            </Text>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
     container: {

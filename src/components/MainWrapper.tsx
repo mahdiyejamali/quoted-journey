@@ -39,9 +39,9 @@ export default function MainWrapper(props: MainWrapperProps) {
                 style={[styles.container, {position: 'absolute', left: Dimensions.get('window').width}]}
             >
                 <View style={{flex: 1}}>
-                <ImageBackground source={themeSources[themeKey]} style={styles.backgroundImage}>
-                    <QuoteText quoteText={useSelector(selectQuoteText)} />
-                </ImageBackground>
+                    <ImageBackground source={themeSources[themeKey]} style={styles.backgroundImage}>
+                        <QuoteText quoteText={useSelector(selectQuoteText)} />
+                    </ImageBackground>
                 </View>
             </View>
 
@@ -49,7 +49,6 @@ export default function MainWrapper(props: MainWrapperProps) {
                 <QuoteSwiper 
                     quotesList={quotesList}
                     category={category}
-                    themeKey={themeKey} 
                     downloadImage={downloadImage} 
                     shareToInstagram={shareToInstagram} 
                 />

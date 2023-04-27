@@ -14,3 +14,18 @@ export const themeSources: {[key: string]: ImageSourcePropType} = {
     '11': require('../../assets/bgs/bg-11.jpg'),
     '12': require('../../assets/bgs/bg-12.jpg'),
 }
+
+export const themeFontColors: {[key: string]: string} = {
+    '1': '#202020',
+    '2': '#202020',
+    '3': '#202020',
+    '4': 'white',
+    '5': 'white',
+    '6': 'white',
+    '7': 'white',
+    '8': 'white',
+    '9': 'white',
+    '10': '#202020',
+    '11': 'white',
+    '12': 'white',
+}
