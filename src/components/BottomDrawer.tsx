@@ -1,7 +1,8 @@
-import GestureRecognizer from 'react-native-swipe-gestures';
-import { Modal, View,StyleSheet, Dimensions } from 'react-native';
+import { View,StyleSheet, Dimensions } from 'react-native';
 import { Box, Button, Heading, HStack, Image, Pressable, ScrollView, Text, VStack } from 'native-base';
 import { useDispatch } from 'react-redux';
+import Modal from 'react-native-modalbox'
+
 import { themeSources } from '../constants/themes';
 import { setThemeKey } from '../store/slices/themeSlice';
 import useFavorite from '../hooks/useFavorite';
@@ -10,9 +11,10 @@ interface BottomDrawer extends CategoriesProps {
     isOpen: boolean;
     setIsOpen: (val: boolean) => void;
 }
+
+const MODAL_HEIGHT = Dimensions.get('window').height * 0.85;
 export default function BottomDrawer(props: BottomDrawer) {
     const {isOpen, setIsOpen, ...categoriesProps} = props;
-    const windowHeight = Dimensions.get('window').height;
 
     const handleOpen = () => {
         setIsOpen(true);
@@ -23,31 +25,30 @@ export default function BottomDrawer(props: BottomDrawer) {
     };
 
     return (
-        <GestureRecognizer
-            // onSwipeDown={() => setIsOpen(false)}
-            // config={{velocityThreshold: 0.01, directionalOffsetThreshold: 250}}
+        <Modal
+            backdrop={true}
+            backdropPressToClose
+            swipeToClose
+            position="bottom"
+            isOpen={isOpen}
+            onOpened={handleOpen}
+            onClosed={handleClose}
+            style={styles.modal}
         >
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isOpen}
-                // onRequestClose={handleClose}
-            >
-                <View style={[styles.bottomDrawer, { height: windowHeight * 0.85 }]}>
-                    <Box style={{position: 'absolute',left: 0, top: 0, margin: 5}}>
-                        <Button variant='unstyled' onPress={handleClose}>
-                            <Text style={{fontWeight: 'bold'}}>Cancel</Text>
-                        </Button>
-                    </Box>
+            <View style={[styles.bottomDrawer]}>
+                <Box style={{position: 'absolute',left: 0, top: 0, margin: 5}}>
+                    <Button variant='unstyled' onPress={handleClose}>
+                        <Text style={{fontWeight: 'bold'}}>Cancel</Text>
+                    </Button>
+                </Box>
 
-                    <Heading style={{margin: 15}} size='md'>Categories</Heading>
-                    <Categories {...categoriesProps} />
+                <Heading style={{margin: 15}} size='md'>Categories</Heading>
+                <Categories {...categoriesProps} />
 
-                    <Heading style={{margin: 15}} size='md'>Themes</Heading>
-                    <Themes />
-                </View>
-            </Modal>
-        </GestureRecognizer>
+                <Heading style={{margin: 15}} size='md'>Themes</Heading>
+                <Themes />
+            </View>
+        </Modal>
     )
 }
 
@@ -162,9 +163,12 @@ const Category = (props: CategoryProps) => {
     )
 }
 
-
-
 const styles = StyleSheet.create({
+    modal: {
+        height: MODAL_HEIGHT,
+        justifyContent:'center',
+        borderRadius: 10,
+    },
     bottomDrawer: {
         position: 'absolute',
         left: 0,
@@ -177,6 +181,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         bottom: 0,
         backgroundColor: 'white',
+        height: MODAL_HEIGHT,
     },
     categoryBox: {
         alignItems: 'center',

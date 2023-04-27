@@ -1,17 +1,17 @@
 import { Dimensions, ImageBackground, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Box, Icon, IconButton, View } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import useDownloadImage from '../hooks/useDownloadImage';
-import useAudio from '../hooks/useAudio';
-
-import { themeSources } from '../constants/themes';
 import CustomToast from './CustomToast';
-import { selectThemeKey } from '../store/slices/themeSlice';
-import { useSelector } from 'react-redux';
 import QuoteSwiper, { Category } from './QuoteSwiper';
 import { QuoteText } from './QuoteWrapper';
+
+import useDownloadImage from '../hooks/useDownloadImage';
+import useAudio from '../hooks/useAudio';
+import { themeSources } from '../constants/themes';
+import { selectThemeKey } from '../store/slices/themeSlice';
 import { selectQuoteText } from '../store/slices/quoteSlice';
 
 const MAIN_BUTTON_COLOR = "teal.500";

@@ -27,5 +27,5 @@ export const themeFontColors: {[key: string]: string} = {
     '9': 'white',
     '10': '#202020',
     '11': 'white',
-    '12': 'white',
+    '12': '#202020',
 }

@@ -82,7 +82,7 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-export const getQuotesList = async function (genre: QuoteGardenGenre = "life", limit: number = 200): Promise<string[]> {
+export const getQuotesList = async function (genre: QuoteGardenGenre = "life", limit: number = 100): Promise<string[]> {
   // const url = `https://quote-garden.onrender.com/api/v3/quotes?genre=${genre}&limit=${limit}`;
   // const response: QuoteGardenResponse = await processFetchRequest(url);
   // if (!response) {

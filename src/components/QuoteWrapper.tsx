@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { selectThemeKey } from '../store/slices/themeSlice';
 import { useSelector } from 'react-redux';
 import { themeFontColors } from '../constants/themes';
+import { memo } from 'react';
 
 const MAIN_BUTTON_COLOR = "teal.500";
 // https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
@@ -17,16 +18,15 @@ const QUOTE_ITEM_HEIGHT = Dimensions.get('window').height;
 const QUOTE_ITEM_WIDTH = Dimensions.get('window').width;
 export interface QuoteWrapperProps {
     quoteText: string;
+    isFavorite: boolean;
     downloadImage: () => void;
     shareToInstagram: () => void;
 }
-export default function QuoteWrapper(props: QuoteWrapperProps) {
-    const {quoteText, downloadImage, shareToInstagram} = props;
+function QuoteWrapper(props: QuoteWrapperProps) {
+    const {quoteText, isFavorite, downloadImage, shareToInstagram} = props;
     const dispatch = useDispatch();
     const themeKey = useSelector(selectThemeKey);
 
-    const {isFavoriteSaved} = useFavorite();
-    const isFavorite = isFavoriteSaved(quoteText);
     const onPressFavorite = () => {
         if (isFavorite) {
             dispatch(removeFavorite(quoteText))
@@ -34,7 +34,6 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
             dispatch(addFavorite(quoteText))
         }
     }
-
 
     return (
         <View style={styles.container} height={QUOTE_ITEM_HEIGHT}>
@@ -77,6 +76,18 @@ export default function QuoteWrapper(props: QuoteWrapperProps) {
         </View>   
     );
 }
+
+const areEqual = (prevProps: QuoteWrapperProps, nextProps: QuoteWrapperProps) => {
+    const { isFavorite } = nextProps;
+    const { isFavorite: prevIsFavorite } = prevProps;
+    
+    /*if the props are equal, it won't update*/
+    const isSelectedEqual = isFavorite === prevIsFavorite;
+  
+    return isSelectedEqual;
+};
+
+export default memo(QuoteWrapper, areEqual)
 
 export const QuoteText = (props: {quoteText: string}) => {
     const themeKey = useSelector(selectThemeKey);

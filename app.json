@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "quoted-journey",
-    "slug": "quoted-journey",
+    "name": "Mindful Moments",
+    "slug": "mindful-moments",
+    "description": "Start living more mindfully.",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,13 +16,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos.",
+        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos."
+      },
+      "bundleIdentifier": "com.mahdiyejamali68.mindfulmoments"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
+      ],
+      "package": "com.mahdiyejamali68.mindfulmoments"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +47,11 @@
           "isAccessMediaLocationEnabled": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "60a0873e-2d2f-4561-9bbe-5516ad7df089"
+      }
+    }
   }
 }

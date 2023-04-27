@@ -1,24 +1,18 @@
+import { ReactNode, useCallback, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from "redux-persist/integration/react";
 import { extendTheme, NativeBaseProvider, View } from 'native-base';
-import Main from './src/components/Main';
 import { persistStore } from "redux-persist"
-import {
-    useFonts,
-    BalsamiqSans_400Regular,
-    BalsamiqSans_400Regular_Italic,
-    BalsamiqSans_700Bold,
-    BalsamiqSans_700Bold_Italic,
-} from "@expo-google-fonts/balsamiq-sans";
+import { useFonts } from "expo-font";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 
+import Main from './src/components/Main';
 import store from './src/store/store';
 import useNotification from './src/hooks/useNotification';
 import Favorites from './src/components/Favorites';
 import BottomDrawer from './src/components/BottomDrawer';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 const Stack = createNativeStackNavigator();
 interface ScreenWrapperChildrenProps {
@@ -73,12 +67,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
     const {} = useNotification();
-    let [fontsLoaded] = useFonts({
-        BalsamiqSans_400Regular,
-        BalsamiqSans_400Regular_Italic,
-        BalsamiqSans_700Bold,
-        BalsamiqSans_700Bold_Italic,
-
+    const [fontsLoaded] = useFonts({
         'Caveat-Bold': require('./assets/fonts/Caveat-Bold.ttf'),
         'Caveat-Medium': require('./assets/fonts/Caveat-Medium.ttf'),
         'Caveat-Regular': require('./assets/fonts/Caveat-Regular.ttf'),
