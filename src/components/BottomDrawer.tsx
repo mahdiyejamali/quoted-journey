@@ -6,6 +6,8 @@ import Modal from 'react-native-modalbox'
 import { themeSources } from '../constants/themes';
 import { setThemeKey } from '../store/slices/themeSlice';
 import useFavorite from '../hooks/useFavorite';
+import { QuoteGenre } from '../providers/quotable';
+import { setQuoteGenre } from '../store/slices/quoteSlice';
 
 interface BottomDrawer extends CategoriesProps {
     isOpen: boolean;
@@ -36,17 +38,19 @@ export default function BottomDrawer(props: BottomDrawer) {
             style={styles.modal}
         >
             <View style={[styles.bottomDrawer]}>
-                <Box style={{position: 'absolute',left: 0, top: 0, margin: 5}}>
+                <Box style={{position: 'absolute', left: 0, top: 0, margin: 5}}>
                     <Button variant='unstyled' onPress={handleClose}>
                         <Text style={{fontWeight: 'bold'}}>Cancel</Text>
                     </Button>
                 </Box>
 
-                <Heading style={{margin: 15}} size='md'>Categories</Heading>
-                <Categories {...categoriesProps} />
+                <ScrollView style={{marginTop: 25, paddingHorizontal: 5}}>
+                    <Heading style={{marginVertical: 15}} size='md'>Categories</Heading>
+                    <Categories {...categoriesProps} />
 
-                <Heading style={{margin: 15}} size='md'>Themes</Heading>
-                <Themes />
+                    <Heading style={{marginVertical: 15}} size='md'>Themes</Heading>
+                    <Themes />
+                </ScrollView>
             </View>
         </Modal>
     )
@@ -54,7 +58,6 @@ export default function BottomDrawer(props: BottomDrawer) {
 
 const Themes = () => {
     return (
-        <ScrollView>
         <VStack space={3}>
             <HStack space={5} justifyContent="center">
                 <Theme themeKey="1" />
@@ -81,7 +84,6 @@ const Themes = () => {
                 <Theme themeKey="12" />
             </HStack>
         </VStack>
-        </ScrollView>
     )
 }
 
@@ -96,7 +98,7 @@ const Theme = (props: {themeKey: string}) => {
                 isPressed
             }) => {
                 return (
-                    <Box alignItems="left" style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
+                    <Box style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
                         <Box
                             rounded="lg" 
                             overflow="hidden" 
@@ -118,16 +120,38 @@ interface CategoriesProps {
 }
 const Categories = (props: CategoriesProps) => {
     const {hasFavorites} = useFavorite();
+    const dispatch = useDispatch();
+
+    const onCategoryPress = (genre: QuoteGenre) => {
+        // Set quote genre
+        dispatch(setQuoteGenre(genre));
+        props.navigateToHome();
+    }
+
     return (
-        <HStack space={5} justifyContent="center">
-            <Category categoryKey="General" onPress={props.navigateToHome} />
-            <Category categoryKey="Favorites" onPress={props.navigateToFavorites} disabled={!hasFavorites()} backgroundColor={'rose.300'} />
-        </HStack>
+        <VStack space={3}>
+            <HStack space={5} justifyContent="center">
+                <Category categoryTitle="General" onPress={() => onCategoryPress("life")} />
+                <Category categoryTitle="Motivational" onPress={() => onCategoryPress("motivational")} />
+            </HStack>
+            <HStack space={5} justifyContent="center">
+                <Category categoryTitle="Inspirational" onPress={() => onCategoryPress("inspirational")} />
+                <Category categoryTitle="Peace" onPress={() => onCategoryPress("peace")} />
+            </HStack>
+            <HStack space={5} justifyContent="center">
+                <Category
+                    categoryTitle="Favorites" 
+                    onPress={props.navigateToFavorites} 
+                    disabled={!hasFavorites()} 
+                    backgroundColor={'rose.300'} 
+                />
+            </HStack>
+        </VStack>
     )
 }
 
 interface CategoryProps {
-    categoryKey: string;
+    categoryTitle: string;
     onPress: () => void;
     disabled?: boolean
     backgroundColor?: string;
@@ -143,7 +167,7 @@ const Category = (props: CategoryProps) => {
                 isPressed
             }) => {
                 return (
-                    <Box alignItems="left" style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
+                    <Box style={{transform: [{scale: isPressed ? 0.96 : 1}]}}>
                         <Box
                             rounded="lg" 
                             overflow="hidden" 
@@ -154,7 +178,7 @@ const Category = (props: CategoryProps) => {
                             style={styles.categoryBox}
                             backgroundColor={disabled ? 'gray.200': backgroundColor}
                         >
-                            <Text style={{fontWeight: 'bold'}}>{props.categoryKey}</Text>
+                            <Text style={{fontWeight: 'bold'}}>{props.categoryTitle}</Text>
                         </Box>
                     </Box>
                 )

@@ -70,7 +70,7 @@ export default function QuoteSwiper(props: QuoteSwiperProps) {
         { length: QUOTE_ITEM_HEIGHT, offset: QUOTE_ITEM_HEIGHT * index, index }
     )
 
-    const keyExtractor = (item: string, index: number) => index.toString()
+    const keyExtractor = (item: string, index: number) => item.toString()
 
     const onViewableItemsChanged = ({viewableItems}: {
         viewableItems: ViewToken[], changed: ViewToken[]

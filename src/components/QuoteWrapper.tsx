@@ -81,10 +81,9 @@ const areEqual = (prevProps: QuoteWrapperProps, nextProps: QuoteWrapperProps) =>
     const { isFavorite } = nextProps;
     const { isFavorite: prevIsFavorite } = prevProps;
     
-    /*if the props are equal, it won't update*/
-    const isSelectedEqual = isFavorite === prevIsFavorite;
-  
-    return isSelectedEqual;
+    /* if the props are equal, it won't update */
+    const isFavoriteEqual = isFavorite === prevIsFavorite;
+    return isFavoriteEqual;
 };
 
 export default memo(QuoteWrapper, areEqual)
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
         lineHeight: 32,
         textAlign: 'center',
         fontFamily: 'IndieFlower-Regular',
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         paddingVertical: 30,
         height: 'auto'
     },

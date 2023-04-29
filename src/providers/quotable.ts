@@ -1,13 +1,16 @@
 import { processFetchRequest } from '../utils';
 import { affirmations } from "../constants/affirmations"
 import { lifeQuotes } from "../constants/lifeQuotes"
+import { motivationalQuotes } from '../constants/motivationalQuotes';
+import { inspirationalQuotes } from '../constants/inspirationalQuotes';
+import { peaceQuotes } from '../constants/peaceQuotes';
 
 export interface QuoteResponse {
   content: string;
   author?: string;
 }
 
-export const QUOTE_GARDEN_GENRES = [
+const QUOTE_GARDEN_GENRES = [
   // "art",
   // "attitude",
   "beauty",
@@ -34,7 +37,7 @@ export const QUOTE_GARDEN_GENRES = [
   // "travel"
 ] as const;
 
-export type QuoteGardenGenre = typeof QUOTE_GARDEN_GENRES[number];
+export type QuoteGenre = "life" | "motivational" | "inspirational" | "peace" | "affirmation";
 
 interface QuoteGardenParams {
   author?: string;
@@ -44,18 +47,19 @@ interface QuoteGardenParams {
   limit?: number;
 }
 interface QuoteGardenResponse {
-  data: {
-    quoteText: string;
-    quoteAuthor?: string;
-    quoteGenre?: string,
-  }[]
+  data: QuoteGardenData[]
+}
+interface QuoteGardenData {
+  quoteText: string;
+  quoteAuthor?: string;
+  quoteGenre?: string,
 }
 
 export const getRandomAffirmation = () => {
   return affirmations[Math.floor(Math.random() * affirmations.length)];
 }
 
-export const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promise<QuoteResponse> {
+export const getRandomQuote = async function (genre: QuoteGenre = "life"): Promise<QuoteResponse> {
   const url = `https://quote-garden.onrender.com/api/v3/quotes/random?genre=${genre}`;
   const response: QuoteGardenResponse = await processFetchRequest(url);
   if (!response) {
@@ -82,16 +86,21 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-export const getQuotesList = async function (genre: QuoteGardenGenre = "life", limit: number = 100): Promise<string[]> {
-  // const url = `https://quote-garden.onrender.com/api/v3/quotes?genre=${genre}&limit=${limit}`;
-  // const response: QuoteGardenResponse = await processFetchRequest(url);
-  // if (!response) {
-  //   return getAffirmations()
-  // }
+const QUOTES_BY_GENRE: {[key: string]: QuoteGardenData[]} = {
+  "life": lifeQuotes,
+  "motivational": motivationalQuotes,
+  "inspirational": inspirationalQuotes,
+  "peace": peaceQuotes,
 
-  const randomStartIndex = getRandomInt(0, lifeQuotes.length - limit);
+  // "affirmation": affirmations.map(item => ({quoteText: item})),
+}
 
-  const quotes = lifeQuotes.slice(randomStartIndex, randomStartIndex + limit)
+
+export const getQuotesList = async function (genre: QuoteGenre = "life", limit: number = 50): Promise<string[]> {
+  const quotesByGenre = QUOTES_BY_GENRE[genre];
+  const randomStartIndex = getRandomInt(0, quotesByGenre.length - limit);
+
+  const quotes = quotesByGenre.slice(randomStartIndex, randomStartIndex + limit)
     .map(item => createQuoteText({content: item?.quoteText, author: item?.quoteAuthor}));
 
   return quotes;

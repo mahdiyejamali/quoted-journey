@@ -4,6 +4,7 @@ import { themeSlice } from './slices/themeSlice';
 import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { favoritesSlice } from './slices/favoritesSlice';
+import { QuoteGenre } from '../providers/quotable';
 
 export interface State {
     'quote': QuoteState,
@@ -19,6 +20,7 @@ export interface FontStyles {
 
 export interface QuoteState {
     text: string;
+    genre?: QuoteGenre;
 }
 
 export interface ThemeState {
