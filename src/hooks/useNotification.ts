@@ -28,7 +28,7 @@ export default function useNotification() {
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            console.error(response);
+            console.log('data', response.notification?.request?.content?.data);
         });
 
         return () => {
@@ -50,12 +50,12 @@ async function schedulePushNotification() {
     await Notifications.scheduleNotificationAsync({
         content: {
             title: 'Mindful Moments',
-            body: quote,
-            data: { data: 'myData' },
+            body: quote.quoteText,
+            data: { quote },
         },
         trigger: {
-            hour: 14,
-            minute: 44,
+            hour: 19,
+            minute: 48,
             repeats: true,
         },
     });
@@ -73,7 +73,7 @@ async function registerForPushNotificationsAsync() {
         });
     }
 
-    if (Device.isDevice) {
+    // if (Device.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
@@ -85,9 +85,7 @@ async function registerForPushNotificationsAsync() {
             return;
         }
         token = (await Notifications.getExpoPushTokenAsync({projectId: PROJEC_ID})).data;
-    } else {
-        alert('Must use physical device for Push Notifications');
-    }
+    // }
 
     return token;
 }

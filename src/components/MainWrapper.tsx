@@ -10,11 +10,10 @@ import { QuoteText } from './QuoteWrapper';
 
 import useDownloadImage from '../hooks/useDownloadImage';
 import useAudio from '../hooks/useAudio';
-import { themeSources } from '../constants/themes';
+import { MAIN_BG_COLOR, themeSources } from '../constants/themes';
 import { selectThemeKey } from '../store/slices/themeSlice';
 import { selectQuoteText } from '../store/slices/quoteSlice';
 
-const MAIN_BUTTON_COLOR = "teal.500";
 // https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
 
 export interface MainWrapperProps {
@@ -60,7 +59,7 @@ export default function MainWrapper(props: MainWrapperProps) {
                     borderRadius="full" 
                     variant="solid" 
                     p="3"
-                    bg={MAIN_BUTTON_COLOR}
+                    bg={MAIN_BG_COLOR}
                     icon={<Icon color="white" name="menu" as={MaterialIcons} size="lg" />} 
                     onPress={openDrawer}
                 />
@@ -72,7 +71,7 @@ export default function MainWrapper(props: MainWrapperProps) {
                     borderRadius="full" 
                     variant="solid" 
                     p="3"
-                    bg={MAIN_BUTTON_COLOR}
+                    bg={MAIN_BG_COLOR}
                     icon={<Icon color="white" name="volume-mute-outline" as={Ionicons} size="lg" />}
                     onPress={stopAudio}
                 /> :
@@ -81,7 +80,7 @@ export default function MainWrapper(props: MainWrapperProps) {
                     borderRadius="full" 
                     variant="solid" 
                     p="3"
-                    bg={MAIN_BUTTON_COLOR}
+                    bg={MAIN_BG_COLOR}
                     icon={<Icon color="white" name="volume-high-outline" as={Ionicons} size="lg" />} 
                     onPress={playAudio}
                 />}
@@ -103,12 +102,12 @@ const styles = StyleSheet.create({
     },
     mainButtons: {
         position: 'absolute', 
-        bottom: 70, 
+        bottom: '6%', 
     },
     leftBox: {
-        left: 30,
+        left: '5%',
     },
     rightBox: {
-        right: 30,
+        right: '5%',
     },
 });

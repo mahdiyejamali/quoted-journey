@@ -15,7 +15,7 @@ export const quoteSlice = createSlice({
     },
     setQuoteGenre: (state, action) => {
       state.genre = action.payload;
-  },
+    },
   },
 });
 

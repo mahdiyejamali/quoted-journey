@@ -1,13 +1,17 @@
 import { View,StyleSheet, Dimensions } from 'react-native';
-import { Box, Button, Heading, HStack, Image, Pressable, ScrollView, Text, VStack } from 'native-base';
+import { Box, Button, Heading, HStack, Image, Pressable, ScrollView, Switch, Text, VStack } from 'native-base';
 import { useDispatch } from 'react-redux';
 import Modal from 'react-native-modalbox'
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
-import { themeSources } from '../constants/themes';
+import { MAIN_BG_COLOR, themeSources } from '../constants/themes';
 import { setThemeKey } from '../store/slices/themeSlice';
 import useFavorite from '../hooks/useFavorite';
 import { QuoteGenre } from '../providers/quotable';
 import { setQuoteGenre } from '../store/slices/quoteSlice';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectNotificationStatus, selectNotificationTime, setNotificationStatus, setNotificationTime } from '../store/slices/notificationSlice';
 
 interface BottomDrawer extends CategoriesProps {
     isOpen: boolean;
@@ -45,6 +49,9 @@ export default function BottomDrawer(props: BottomDrawer) {
                 </Box>
 
                 <ScrollView style={{marginTop: 25, paddingHorizontal: 5}}>
+                    <Heading style={{marginVertical: 15}} size='md'>Notifications</Heading>
+                    <NotificationSettings />
+
                     <Heading style={{marginVertical: 15}} size='md'>Categories</Heading>
                     <Categories {...categoriesProps} />
 
@@ -53,6 +60,63 @@ export default function BottomDrawer(props: BottomDrawer) {
                 </ScrollView>
             </View>
         </Modal>
+    )
+}
+
+const NotificationSettings = () => {
+    const dispatch = useDispatch();
+    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
+    const notificationStatus = useSelector(selectNotificationStatus);
+    const notificationTime = useSelector(selectNotificationTime);
+
+    const onStatusToggle = (toggleValue: boolean) => {
+        dispatch(setNotificationStatus(toggleValue));
+    }
+
+    const onTimeChange = (timestamp: number | undefined, type: string) => {
+        // type => "dismissed" | "set"
+        setIsTimePickerOpen(false);
+
+        if (type == "set") {
+            dispatch(setNotificationTime(timestamp))
+        }
+    }
+
+    return (
+        <HStack>
+            <HStack space={5}>
+                <Box
+                    rounded="lg" 
+                    width={160}
+                    height={50}
+                    style={{alignItems: 'flex-start'}}
+                >
+                    <Switch size="lg" isChecked={notificationStatus} onToggle={onStatusToggle} />
+                </Box>
+
+                <Box
+                    rounded="lg" 
+                    width={160}
+                    height={50}
+                >
+                    <Button
+                        width="100%" 
+                        backgroundColor={!notificationStatus ? 'gray.200': MAIN_BG_COLOR}
+                        onPress={() => !!notificationStatus && setIsTimePickerOpen(true)}
+                    >
+                        <Text style={{fontWeight: 'bold'}}>Set Time</Text>
+                    </Button>
+
+                    {isTimePickerOpen && 
+                        <RNDateTimePicker
+                            onChange={(dateTime) => onTimeChange(dateTime.nativeEvent.timestamp, dateTime.type.toString())}
+                            value={notificationTime ? new Date(notificationTime): new Date()}
+                            mode="time"
+                        />
+                    }
+                </Box>
+            </HStack>
+        </HStack>
     )
 }
 
@@ -139,11 +203,12 @@ const Categories = (props: CategoriesProps) => {
                 <Category categoryTitle="Peace" onPress={() => onCategoryPress("peace")} />
             </HStack>
             <HStack space={5} justifyContent="center">
+                <Category categoryTitle="Affirmations" onPress={() => onCategoryPress("affirmation")} />
                 <Category
                     categoryTitle="Favorites" 
                     onPress={props.navigateToFavorites} 
                     disabled={!hasFavorites()} 
-                    backgroundColor={'rose.300'} 
+                    // backgroundColor={'rose.500'} 
                 />
             </HStack>
         </VStack>
@@ -158,7 +223,7 @@ interface CategoryProps {
 }
 const Category = (props: CategoryProps) => {
     const {disabled} = props;
-    const backgroundColor = props.backgroundColor || 'teal.200';
+    const backgroundColor = props.backgroundColor || MAIN_BG_COLOR;
     return (
         <Pressable onPress={props.onPress} disabled={disabled}>
             {({
@@ -171,12 +236,12 @@ const Category = (props: CategoryProps) => {
                         <Box
                             rounded="lg" 
                             overflow="hidden" 
-                            borderColor="coolGray.200" 
-                            borderWidth=".5" 
+                            borderColor={disabled ? 'gray.200': backgroundColor}
+                            borderWidth="1.5" 
                             width={160}
                             height={70}
                             style={styles.categoryBox}
-                            backgroundColor={disabled ? 'gray.200': backgroundColor}
+                            // backgroundColor={disabled ? 'gray.200': backgroundColor}
                         >
                             <Text style={{fontWeight: 'bold'}}>{props.categoryTitle}</Text>
                         </Box>

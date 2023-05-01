@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.17.11",
+    "@react-native-community/datetimepicker": "^6.7.3",
     "@react-navigation/native-stack": "^6.9.12",
     "@reduxjs/toolkit": "^1.9.5",
     "expo": "~48.0.11",
@@ -21,6 +22,7 @@
     "expo-sharing": "~11.2.2",
     "expo-splash-screen": "^0.18.2",
     "expo-status-bar": "~1.4.4",
+    "expo-updates": "~0.16.4",
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.71.7",
@@ -30,8 +32,7 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-view-shot": "3.5.0",
     "react-redux": "^8.0.5",
-    "redux-persist": "^6.0.0",
-    "expo-updates": "~0.16.4"
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

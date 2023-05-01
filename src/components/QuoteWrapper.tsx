@@ -8,10 +8,9 @@ import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
 import { useDispatch } from 'react-redux';
 import { selectThemeKey } from '../store/slices/themeSlice';
 import { useSelector } from 'react-redux';
-import { themeFontColors } from '../constants/themes';
+import { MAIN_BG_COLOR, themeFontColors } from '../constants/themes';
 import { memo } from 'react';
 
-const MAIN_BUTTON_COLOR = "teal.500";
 // https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
 
 const QUOTE_ITEM_HEIGHT = Dimensions.get('window').height;
@@ -46,7 +45,7 @@ function QuoteWrapper(props: QuoteWrapperProps) {
                     variant="outline" 
                     p="3"
                     // bg="secondary" 
-                    borderColor={MAIN_BUTTON_COLOR}
+                    borderColor={MAIN_BG_COLOR}
                     icon={<Icon color={themeFontColors[themeKey] || 'white'} name={isFavorite ? "favorite": "favorite-border"} as={MaterialIcons} size="lg" />} 
                     onPress={onPressFavorite}
                 />
@@ -57,7 +56,7 @@ function QuoteWrapper(props: QuoteWrapperProps) {
                     variant="outline" 
                     p="3"
                     // bg="secondary" 
-                    borderColor={MAIN_BUTTON_COLOR}
+                    borderColor={MAIN_BG_COLOR}
                     icon={<Icon color={themeFontColors[themeKey] || 'white'} name="file-download" as={MaterialIcons} size="lg" />} 
                     onPress={downloadImage}
                 />
@@ -68,7 +67,7 @@ function QuoteWrapper(props: QuoteWrapperProps) {
                     variant="outline" 
                     p="3"
                     // bg="secondary"
-                    borderColor={MAIN_BUTTON_COLOR}
+                    borderColor={MAIN_BG_COLOR}
                     icon={<Icon color={themeFontColors[themeKey] || 'white'} name="share" as={Ionicons} size="lg" />} 
                     onPress={shareToInstagram}
                 />
@@ -109,13 +108,13 @@ const styles = StyleSheet.create({
     actionsBox: {
         flexDirection: 'row',
         position: 'absolute', 
-        bottom: 190, 
+        bottom: '18%', 
         alignSelf: 'center'
     },
     textWrapper: {
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: 27,
+        paddingHorizontal: '6%',
     },
     text: {
         color: 'white',
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'IndieFlower-Regular',
         // fontWeight: 'bold',
-        paddingVertical: 30,
+        // paddingVertical: '3%',
         height: 'auto'
     },
 });

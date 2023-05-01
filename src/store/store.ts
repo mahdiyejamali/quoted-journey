@@ -5,11 +5,13 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE } fro
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { favoritesSlice } from './slices/favoritesSlice';
 import { QuoteGenre } from '../providers/quotable';
+import { notificationSlice } from './slices/notificationSlice';
 
 export interface State {
     'quote': QuoteState,
     'theme': ThemeState,
     'favorites': FavoritesState,
+    'notification': NotificationState,
 }
 
 export interface FontStyles {
@@ -20,7 +22,7 @@ export interface FontStyles {
 
 export interface QuoteState {
     text: string;
-    genre?: QuoteGenre;
+    genre: QuoteGenre;
 }
 
 export interface ThemeState {
@@ -29,6 +31,12 @@ export interface ThemeState {
 
 export interface FavoritesState {
     saved: {[key: string]: boolean};
+}
+
+export interface NotificationState {
+    status: boolean;
+    time?: number;
+    frequency?: number;
 }
 
 const persistConfig = {
@@ -41,6 +49,7 @@ const rootReducer = combineReducers({
     [quoteSlice.name]: quoteSlice.reducer,
 	[themeSlice.name]: themeSlice.reducer,
 	[favoritesSlice.name]: favoritesSlice.reducer,
+	[notificationSlice.name]: notificationSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

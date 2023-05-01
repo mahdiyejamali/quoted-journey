@@ -1,5 +1,7 @@
 import { ImageSourcePropType } from "react-native";
 
+export const MAIN_BG_COLOR = "primary.500";
+
 export const themeSources: {[key: string]: ImageSourcePropType} = {
     '1': require('../../assets/bgs/bg-1.jpg'),
     '2': require('../../assets/bgs/bg-2.jpg'),
@@ -24,7 +26,7 @@ export const themeFontColors: {[key: string]: string} = {
     '6': 'white',
     '7': 'white',
     '8': 'white',
-    '9': 'white',
+    '9': '#202020',
     '10': '#202020',
     '11': 'white',
     '12': '#202020',
