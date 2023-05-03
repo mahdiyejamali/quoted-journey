@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const THEME = 'themeKey';
-const APP_KEY = '@QuotedJourney';
+const APP_KEY = '@MindfulMoments';
 export default function useStorage() {
     const getData = async (key: string) => {
         try {

@@ -37,10 +37,11 @@ export interface NotificationState {
     status: boolean;
     time?: number;
     frequency?: number;
+    lastQuote?: string;
 }
 
 const persistConfig = {
-	key: "@QuotedJourney",
+	key: "@MindfulMoments",
 	version: 1,
 	storage: AsyncStorage,
 };

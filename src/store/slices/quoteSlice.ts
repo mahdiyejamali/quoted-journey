@@ -11,7 +11,7 @@ export const quoteSlice = createSlice({
   initialState: quoteInitialState,
   reducers: {
     setQuoteText: (state, action) => {
-        state.text = action.payload;
+      state.text = action.payload;
     },
     setQuoteGenre: (state, action) => {
       state.genre = action.payload;

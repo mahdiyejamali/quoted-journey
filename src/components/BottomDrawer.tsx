@@ -9,9 +9,10 @@ import { setThemeKey } from '../store/slices/themeSlice';
 import useFavorite from '../hooks/useFavorite';
 import { QuoteGenre } from '../providers/quotable';
 import { setQuoteGenre } from '../store/slices/quoteSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectNotificationStatus, selectNotificationTime, setNotificationStatus, setNotificationTime } from '../store/slices/notificationSlice';
+import { selectNotificationQuote, selectNotificationStatus, selectNotificationTime, setNotificationQuote, setNotificationStatus, setNotificationTime } from '../store/slices/notificationSlice';
+import useNotification from '../hooks/useNotification';
 
 interface BottomDrawer extends CategoriesProps {
     isOpen: boolean;
@@ -66,11 +67,21 @@ export default function BottomDrawer(props: BottomDrawer) {
 const NotificationSettings = () => {
     const dispatch = useDispatch();
     const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
+
     const notificationStatus = useSelector(selectNotificationStatus);
     const notificationTime = useSelector(selectNotificationTime);
+    const notificationQuote = useSelector(selectNotificationQuote);
+
+    const {schedulePushNotification} = useNotification({
+        setQuote: (quote: string) => dispatch(setNotificationQuote(quote)),
+        notificationStatus,
+        notificationTime,
+    });
 
     const onStatusToggle = (toggleValue: boolean) => {
         dispatch(setNotificationStatus(toggleValue));
+
+        schedulePushNotification(toggleValue, notificationTime)
     }
 
     const onTimeChange = (timestamp: number | undefined, type: string) => {
@@ -78,7 +89,9 @@ const NotificationSettings = () => {
         setIsTimePickerOpen(false);
 
         if (type == "set") {
-            dispatch(setNotificationTime(timestamp))
+            dispatch(setNotificationTime(timestamp));
+
+            schedulePushNotification(notificationStatus, timestamp)
         }
     }
 
@@ -185,8 +198,13 @@ interface CategoriesProps {
 const Categories = (props: CategoriesProps) => {
     const {hasFavorites} = useFavorite();
     const dispatch = useDispatch();
+    const notificationQuote = useSelector(selectNotificationQuote);
 
     const onCategoryPress = (genre: QuoteGenre) => {
+        if (notificationQuote) {
+            // Clear notificationQuote when category changes
+            dispatch(setNotificationQuote(undefined));
+        }
         // Set quote genre
         dispatch(setQuoteGenre(genre));
         props.navigateToHome();

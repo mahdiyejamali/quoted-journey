@@ -10,7 +10,6 @@ import * as SplashScreen from "expo-splash-screen";
 
 import Main from './src/components/Main';
 import store from './src/store/store';
-import useNotification from './src/hooks/useNotification';
 import Favorites from './src/components/Favorites';
 import BottomDrawer from './src/components/BottomDrawer';
 
@@ -18,10 +17,12 @@ const Stack = createNativeStackNavigator();
 interface ScreenWrapperChildrenProps {
     openDrawer: () => void;
 }
+
 interface ScreenWrapperProps {
     navigation: {navigate: (name: string) => void};
     children: (props: ScreenWrapperChildrenProps) => ReactNode
 }
+
 const ScreenWrapper = (props: ScreenWrapperProps) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -42,12 +43,15 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
         </View>
     )
 }
+
 const WrappedHome = (navigationProps: {navigation: any}) => (
     <ScreenWrapper {...navigationProps}>{(props) => <Main openDrawer={props.openDrawer} />}</ScreenWrapper>
-)
+);
+
 const WrappedFavorites = (navigationProps: {navigation: any}) => (
     <ScreenWrapper {...navigationProps}>{(props) => <Favorites openDrawer={props.openDrawer} />}</ScreenWrapper>
-)
+);
+
 const NavigationWrapper = () => {
     return (
         <NavigationContainer>
@@ -66,7 +70,6 @@ const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-    const {} = useNotification();
     const [fontsLoaded] = useFonts({
         'Caveat-Bold': require('./assets/fonts/Caveat-Bold.ttf'),
         'Caveat-Medium': require('./assets/fonts/Caveat-Medium.ttf'),

@@ -6,6 +6,7 @@ export const notificationInitialState = {
   status: false,
   time: undefined,
   frequency: undefined,
+  lastQuote: undefined,
 };
 
 export const notificationSlice = createSlice({
@@ -21,6 +22,9 @@ export const notificationSlice = createSlice({
     setNotificationFrequency: (state, action) => {
       state.frequency = action.payload;
     },
+    setNotificationQuote: (state, action) => {
+      state.lastQuote = action.payload;
+    },
   },
 });
 
@@ -28,7 +32,9 @@ export const {
   setNotificationStatus,
   setNotificationTime,
   setNotificationFrequency,
+  setNotificationQuote,
 } = notificationSlice.actions;
 export const selectNotificationStatus = (state: State) => state.notification?.status;
 export const selectNotificationTime = (state: State) => state.notification?.time;
 export const selectNotificationFrequency = (state: State) => state.notification?.frequency;
+export const selectNotificationQuote = (state: State) => state.notification?.lastQuote;

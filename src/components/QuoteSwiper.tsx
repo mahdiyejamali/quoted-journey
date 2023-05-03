@@ -1,14 +1,16 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, FlatList, ActivityIndicator, Dimensions, ViewToken, ListRenderItem } from 'react-native';
+import React, { useCallback } from 'react';
+import { FlatList, Dimensions, ViewToken, ListRenderItem } from 'react-native';
 import { useDispatch } from "react-redux";
 
 import QuoteWrapper, { QuoteText } from "./QuoteWrapper";
 import { setQuoteText } from "../store/slices/quoteSlice";
 import useFavorite from '../hooks/useFavorite';
+import { useSelector } from 'react-redux';
+import { selectNotificationQuote } from '../store/slices/notificationSlice';
 
 const QUOTE_ITEM_HEIGHT = Dimensions.get('window').height;
-const QUOTE_ITEM_WIDTH = Dimensions.get('window').width;
+
 export type Category = "main" | "favorites";
 
 export interface QuoteSwiperProps {
@@ -20,40 +22,18 @@ export interface QuoteSwiperProps {
 
 export default function QuoteSwiper(props: QuoteSwiperProps) {
     const {category} = props;
+    let quotesList = props.quotesList;
     const dispatch = useDispatch();
 
+    const notificationQuote = useSelector(selectNotificationQuote);
+
     const {favoriteQuotes, hasFavorites, isFavoriteSaved} = useFavorite();
-    const quotesByCategory = category == 'favorites' ? favoriteQuotes : props.quotesList;
+    let quotesByCategory = category == 'favorites' ? favoriteQuotes : quotesList;
     const showEmptyFavorites = category == 'favorites' && !hasFavorites();
 
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [quotes, setQuotes] = useState<string[]>([]);
-    // const [page, setPage] = useState(1);
-
-    // const BATCH_SIZE = 5;
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     const startIndex = (page - 1) * BATCH_SIZE;
-    //     const endIndex = startIndex + BATCH_SIZE;
-    //     const newQuotes = quotesByCategory.slice(startIndex, endIndex);
-    //     setQuotes([...quotes, ...newQuotes]);
-    //     setIsLoading(false);
-    // }, [page, quotesByCategory.length]);
-
-    // const renderFooter = () => {
-    //     if (!isLoading) return null;
-    //     return (
-    //         <View style={{ paddingVertical: 20 }}>
-    //             <ActivityIndicator animating size="large" />
-    //         </View>
-    //     );
-    // };
-
-    // const handleLoadMore = () => {
-    //     if (!isLoading) {
-    //         setPage(page + 1);
-    //     }
-    // };
+    if (category != 'favorites' && notificationQuote) {
+        quotesByCategory = [notificationQuote].concat(quotesByCategory);
+    }
 
     const renderItem: ListRenderItem<string> = ({ item }) => {
         const isFavorite = isFavoriteSaved(item);
@@ -66,9 +46,11 @@ export default function QuoteSwiper(props: QuoteSwiperProps) {
         )
     };
 
-    const getItemLayout = (item: any, index: number) => (
-        { length: QUOTE_ITEM_HEIGHT, offset: QUOTE_ITEM_HEIGHT * index, index }
-    )
+    const getItemLayout = (item: any, index: number) => ({
+        length: QUOTE_ITEM_HEIGHT,
+        offset: QUOTE_ITEM_HEIGHT * index,
+        index,
+    })
 
     const keyExtractor = (item: string, index: number) => item.toString()
 
@@ -85,7 +67,6 @@ export default function QuoteSwiper(props: QuoteSwiperProps) {
         <QuoteText quoteText='Your favorites collection is empty.' />
     ) : (
         <FlatList
-            // snapToAlignment={'start'}
             disableIntervalMomentum
             snapToInterval={QUOTE_ITEM_HEIGHT}
             data={quotesByCategory}
@@ -95,8 +76,6 @@ export default function QuoteSwiper(props: QuoteSwiperProps) {
             keyExtractor={keyExtractor}
             onViewableItemsChanged={onViewableItemsChangedCallback}
             viewabilityConfig={{itemVisiblePercentThreshold: 50}}
-            // ListFooterComponent={renderFooter}
-            // onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
         />
     );

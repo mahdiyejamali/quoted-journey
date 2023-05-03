@@ -3,7 +3,6 @@ import { Box, Icon, IconButton, Text, View } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import useFavorite from '../hooks/useFavorite';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
 import { useDispatch } from 'react-redux';
 import { selectThemeKey } from '../store/slices/themeSlice';
