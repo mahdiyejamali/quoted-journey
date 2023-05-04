@@ -104,7 +104,7 @@ const NotificationSettings = () => {
                     height={50}
                     style={{alignItems: 'flex-start'}}
                 >
-                    <Switch size="lg" isChecked={notificationStatus} onToggle={onStatusToggle} />
+                    <Switch size="md" isChecked={notificationStatus} onToggle={onStatusToggle} />
                 </Box>
 
                 <Box
@@ -221,7 +221,7 @@ const Categories = (props: CategoriesProps) => {
                 <Category categoryTitle="Peace" onPress={() => onCategoryPress("peace")} />
             </HStack>
             <HStack space={5} justifyContent="center">
-                <Category categoryTitle="Affirmations" onPress={() => onCategoryPress("affirmation")} />
+                <Category categoryTitle="Affirmations" onPress={() => onCategoryPress("affirmations")} />
                 <Category
                     categoryTitle="Favorites" 
                     onPress={props.navigateToFavorites} 
